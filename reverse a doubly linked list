@@ -1,0 +1,71 @@
+#include <iostream>
+using namespace std;
+
+// Node of a doubly linked list
+struct Node {
+    int data;
+    Node* next;
+    Node* prev;
+
+    Node(int value) {
+        data = value;
+        next = nullptr;
+        prev = nullptr;
+    }
+};
+
+// Function to reverse the doubly linked list
+void reverseDoublyLinkedList(Node*& head) {
+    if (head == nullptr) return;
+
+    Node* current = head;
+    Node* temp = nullptr;
+
+    // Traverse the list and swap next and prev pointers for each node
+    while (current != nullptr) {
+        // Swap the next and prev pointers
+        temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;
+
+        // Move to the next node (which is the previous node now)
+        current = current->prev;
+    }
+
+    // After the loop, temp will be pointing to the old head
+    // So, set the head to the last node (which is the new head)
+    if (temp != nullptr) {
+        head = temp->prev;
+    }
+}
+
+// Function to print the list
+void printList(Node* node) {
+    while (node != nullptr) {
+        cout << node->data << " ";
+        node = node->next;
+    }
+    cout << endl;
+}
+
+int main() {
+    // Creating a doubly linked list: 10 <-> 20 <-> 30 <-> 40
+    Node* head = new Node(10);
+    head->next = new Node(20);
+    head->next->prev = head;
+    head->next->next = new Node(30);
+    head->next->next->prev = head->next;
+    head->next->next->next = new Node(40);
+    head->next->next->next->prev = head->next->next;
+
+    cout << "Original List: ";
+    printList(head);
+
+    // Reverse the list
+    reverseDoublyLinkedList(head);
+
+    cout << "Reversed List: ";
+    printList(head);
+
+    return 0;
+}
